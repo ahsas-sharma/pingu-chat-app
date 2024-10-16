@@ -59,6 +59,17 @@ export const signInUser = async (req, res) => {
   }
 };
 
+export const signOutUser = async (req, res) => {
+  res
+    .clearCookie('refreshToken', {
+      httpOnly: true,
+      sameSite: 'strict',
+      secure: true,
+    })
+    .status(200)
+    .json({ message: 'User signed out successfully.' });
+};
+
 export const getUser = async (req, res) => {
   const { id } = req.params;
   try {

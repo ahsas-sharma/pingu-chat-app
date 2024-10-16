@@ -4,14 +4,14 @@ import User from '../models/userModel.js';
 
 // generate both access and refresh token for a given userId
 export async function generateAccessAndRefreshTokens(userId) {
-  console.log(`Generating access and refresh tokens ...`);
+  console.log(`Generating access and refresh tokens...`);
   try {
     let user = await User.findById(userId);
     const accessToken = jwt.sign(
       { userId: userId },
       CONFIG.ACCESS_TOKEN_SECRET,
       {
-        expiresIn: '20m',
+        expiresIn: '15m',
       },
     );
     const refreshToken = jwt.sign(
@@ -22,6 +22,7 @@ export async function generateAccessAndRefreshTokens(userId) {
     user.refreshToken = refreshToken;
     // store refresh token in the user document
     await user.save({ validateBeforeSave: false });
+    console.log(user);
     return { accessToken, refreshToken };
   } catch (error) {
     throw new Error(error.message);
@@ -114,12 +115,13 @@ export async function verifyToken(req, res, next) {
     }
   }
 }
-
+// TODO: fix bug where new tokens are not set in header and cookie
 // refresh both access and refresh tokens
 export async function refreshTokens(req, res) {
   try {
     let { newAccessToken, newRefreshToken } =
-      await generateAccessAndRefreshTokens(req.payload.userId);
+      await generateAccessAndRefreshTokens(req.body.userId);
+
     return res
       .cookie('refreshToken', newRefreshToken, {
         httpOnly: true,
@@ -128,7 +130,10 @@ export async function refreshTokens(req, res) {
       })
       .header('Authorization', newAccessToken)
       .status(200)
-      .json({ message: 'Token refreshed', token: newAccessToken });
+      .json({
+        message: 'Tokens refreshed',
+        token: newAccessToken,
+      });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }

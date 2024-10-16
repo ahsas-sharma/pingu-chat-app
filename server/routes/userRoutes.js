@@ -3,6 +3,7 @@ import {
   getAllUsers,
   signUpUser,
   signInUser,
+  signOutUser,
 } from '../controllers/userController.js';
 import {
   signUpValidation,
@@ -24,6 +25,9 @@ router.post('/sign-up', signUpValidation(), handleValidationErrors, signUpUser);
 router.post('/sign-in', signInValidation(), handleValidationErrors, signInUser);
 
 // // POST /api/users/refresh-token - generate new access and refresh token
-// router.get("/refresh", refreshTokens);
+router.post('/refresh', refreshTokens);
+
+// POST /api/users/sign-up - create new user
+router.post('/sign-out', signOutUser);
 
 export default router;

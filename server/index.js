@@ -9,6 +9,7 @@ import './config/passport.js';
 import session from 'express-session';
 import userRoutes from './routes/userRoutes.js';
 import authRoutes from './routes/authRoutes.js';
+import uploadRoutes from './routes/uploadRoutes.js';
 
 dotenv.config();
 connectDB();
@@ -35,6 +36,7 @@ app.get('/', (req, res) => {
 
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/upload', uploadRoutes);
 
 // Fallback
 app.use('*', (req, res) => {

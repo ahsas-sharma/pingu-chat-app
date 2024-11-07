@@ -4,9 +4,11 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        pingu: 'Luckiest Guy', // Adds a new `font-display` class
+        pingu: 'Luckiest Guy',
+        heading: 'DynoPuff',
+        body: 'McLaren',
       },
     },
   },
-  plugins: [],
+  plugins: [require('@tailwindcss/forms')],
 };

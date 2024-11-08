@@ -1,9 +1,9 @@
 import CONFIG from '../config/config.js';
 import axios from 'axios';
+import { jwtDecode } from 'jwt-decode';
 
 export const login = async (email, password) => {
   console.log(`Received login request with ${email} ${password}`);
-
   try {
     let response = await axios.post(`${CONFIG.API_BASE_URL}/users/sign-in`, {
       email,
@@ -11,7 +11,13 @@ export const login = async (email, password) => {
     });
     const token = response.data.token;
     window.localStorage.setItem('token', JSON.stringify(token));
-    console.log(response.data);
+    const decoded = jwtDecode(token);
+    response = await axios.get(
+      `${CONFIG.API_BASE_URL}/users/${decoded.userId}`,
+    );
+    const user = response.data;
+    console.log(user);
+    return user;
   } catch (error) {
     let errorString = '';
     console.log(error);
@@ -24,10 +30,4 @@ export const login = async (email, password) => {
     }
     throw errorString;
   }
-};
-
-export const logout = () => {
-  window.localStorage.removeItem('token');
-  setUser(null);
-  loggedIn(false);
 };

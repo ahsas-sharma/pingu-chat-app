@@ -4,6 +4,7 @@ import {
   signUpUser,
   signInUser,
   signOutUser,
+  getUser,
 } from '../controllers/userController.js';
 import {
   signUpValidation,
@@ -17,6 +18,9 @@ const router = express.Router();
 
 // GET /api/users - get all users
 router.get('/', getAllUsers);
+
+// GET /api/users/:id - get all users
+router.get('/:id', getUser);
 
 // POST /api/users/sign-up - create new user
 router.post('/sign-up', signUpValidation(), handleValidationErrors, signUpUser);

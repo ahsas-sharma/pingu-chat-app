@@ -22,7 +22,6 @@ export async function generateAccessAndRefreshTokens(userId) {
     user.refreshToken = refreshToken;
     // store refresh token in the user document
     await user.save({ validateBeforeSave: false });
-    console.log(user);
     return { accessToken, refreshToken };
   } catch (error) {
     throw new Error(error.message);
